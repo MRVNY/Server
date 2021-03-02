@@ -102,7 +102,8 @@ function init(db) {
         }
     });
 
-    //////////LOGOUT//////////
+    //////////LOGOUT////////// 
+    /*
     router.delete("/user/logout", async (req, res) => {
         try {
             const { login, password } = req.body;
@@ -158,7 +159,7 @@ function init(db) {
                 details: (e || "Erreur inconnue").toString()
             });
         }
-    });
+    });*/
 
     return router;
 }

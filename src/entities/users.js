@@ -3,6 +3,8 @@ class Users {
     this.db = db
     // suite plus tard avec la BD
     const req1 = "CREATE TABLE IF NOT EXISTS users (login VARCHAR(512) NOT NULL PRIMARY KEY, password VARCHAR(256) NOT NULL, lastname VARCHAR(256) NOT NULL, firstname VARCHAR(256) NOT NULL);";
+    //this.db.run(req1);
+    
     this.db.exec(req1, (err) => {
       if (err) {
         throw err; 
@@ -15,7 +17,7 @@ class Users {
       const req2 = this.db.prepare('INSERT INTO users VALUES(?, ?, ?, ?);');
       req2.run([login, password, lastname, firstname], (err) => {
         if (err) { reject();}
-        else{ resolve(bd.lastrowid) }
+        else{ resolve(this.db.lastrowid) }
       });
     });
   }
@@ -28,7 +30,7 @@ class Users {
         if (err) {
           reject();
         }
-        else{ resolve(res);}
+        else{ resolve(res !== undefined);}
       });
     });
   }
@@ -41,7 +43,7 @@ class Users {
         if (err) {
           reject();
         }
-        else{ resolve(res != null);}
+        else{ resolve(res !== undefined);}
       });
     });
   }

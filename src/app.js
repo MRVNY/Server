@@ -7,7 +7,7 @@ console.debug(`Base directory: ${basedir}`);
 
 //Connexion à la BD
 const sqlite3 = require('sqlite3').verbose();
-var db = new sqlite3.Database(':memory:');
+let db = new sqlite3.Database(':memory:');
 
 express = require('express');
 const app = express()
@@ -18,7 +18,7 @@ app.use(session({
     secret: "technoweb rocks"
 }));
 
-app.use('/api', api.default());
+app.use('/api', api.default(db));
 
 // Démarre le serveur
 app.on('close', () => {
