@@ -14,8 +14,8 @@ class Users {
 
   create(login, password, lastname, firstname) {
     return new Promise((resolve, reject) => {
-      const req2 = this.db.prepare('INSERT INTO users VALUES(?, ?, ?, ?);');
-      req2.run([login, password, lastname, firstname], (err) => {
+      const req = this.db.prepare('INSERT INTO users VALUES(?, ?, ?, ?);');
+      req.run([login, password, lastname, firstname], (err) => {
         if (err) { reject();}
         else{ resolve(this.db.lastrowid) }
       });
@@ -24,9 +24,9 @@ class Users {
 
   get(userid) {
     return new Promise((resolve, reject) => {
-      req3 = 'SELECT DISTINCT login FROM users WHERE rowid = ? ;';
+      req = 'SELECT DISTINCT login FROM users WHERE rowid = ? ;';
       // get pour un seul
-      req3.get([userid], (err, res) => {
+      req.get([userid], (err, res) => {
         if (err) {
           reject();
         }
@@ -37,9 +37,9 @@ class Users {
 
   async exists(login) {
     return new Promise((resolve, reject) => {
-      req3 = 'SELECT DISTINCT login FROM users WHERE login = ? ;';
+      req = 'SELECT DISTINCT login FROM users WHERE login = ? ;';
       // get pour un seul
-      req3.get([login,password], (err, res) => {
+      req.get([login,password], (err, res) => {
         if (err) {
           reject();
         }
@@ -50,9 +50,9 @@ class Users {
 
   checkpassword(login, password) {
     return new Promise((resolve, reject) => {
-      req4 = 'SELECT DISTINCT login FROM users WHERE login = ? and password = ?;';
+      req = 'SELECT DISTINCT login FROM users WHERE login = ? and password = ?;';
       // get pour un seul
-      this.db.get(req4, [login,password], (err, res) => {
+      this.db.get(req, [login,password], (err, res) => {
         if (err) {
           reject();
         }
