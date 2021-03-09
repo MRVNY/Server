@@ -2,7 +2,12 @@ class Users {
   constructor(db) {
     this.db = db
     // suite plus tard avec la BD
-    const req1 = "CREATE TABLE IF NOT EXISTS users (login VARCHAR(512) NOT NULL PRIMARY KEY, password VARCHAR(256) NOT NULL, lastname VARCHAR(256) NOT NULL, firstname VARCHAR(256) NOT NULL);";
+    const req1 = `CREATE TABLE IF NOT EXISTS users ( 
+      login VARCHAR(512) NOT NULL PRIMARY KEY, 
+      password VARCHAR(256) NOT NULL, 
+      lastname VARCHAR(256) NOT NULL, 
+      firstname VARCHAR(256) NOT NULL 
+      )`;
     //this.db.run(req1);
     
     this.db.exec(req1, (err) => {
@@ -13,52 +18,47 @@ class Users {
   }
 
   create(login, password, lastname, firstname) {
+    let _this = this
     return new Promise((resolve, reject) => {
-      const req = this.db.prepare('INSERT INTO users VALUES(?, ?, ?, ?);');
-      req.run([login, password, lastname, firstname], (err) => {
-        if (err) { reject();}
-        else{ resolve(this.db.lastrowid) }
+      var req = _this.db.prepare("INSERT INTO users VALUES(?, ?, ?, ?)");
+      req.run([login, password, lastname, firstname], function(err) {
+        if (err) reject();
+        else resolve(this.lastID);
       });
     });
   }
 
   get(userid) {
     return new Promise((resolve, reject) => {
-      req = 'SELECT DISTINCT login FROM users WHERE rowid = ? ;';
-      // get pour un seul
-      req.get([userid], (err, res) => {
-        if (err) {
-          reject();
-        }
-        else{ resolve(res !== undefined);}
+      var stmt = this.db.prepare("SELECT * FROM users WHERE rowid = ?")
+      stmt.get([userid],function(err,res){
+        if (err) reject(err);
+        else resolve(res);
       });
     });
   }
 
   async exists(login) {
     return new Promise((resolve, reject) => {
-      req = 'SELECT DISTINCT login FROM users WHERE login = ? ;';
+      var req = 'SELECT DISTINCT login FROM users WHERE login = ? ;';
       // get pour un seul
-      req.get([login,password], (err, res) => {
+      req.get([login], (err, res) => {
         if (err) {
-          reject();
+          reject(err);
         }
         else{ resolve(res !== undefined);}
       });
     });
   }
 
-  checkpassword(login, password) {
+  async checkpassword(login, password) {
     return new Promise((resolve, reject) => {
-      req = 'SELECT DISTINCT login FROM users WHERE login = ? and password = ?;';
-      // get pour un seul
-      this.db.get(req, [login,password], (err, res) => {
-        if (err) {
-          reject();
-        }
-        else{ resolve(res != null);}
-      });
-    });
+      var stmt = db.prepare("SELECT rowid as user_id FROM users WHERE login = ? and password = ?")
+      stmt.get([login, password],function(err,res){
+        if (err) reject(err);
+        else resolve(res.user_id);
+      })
+    })
   }
 }
 
