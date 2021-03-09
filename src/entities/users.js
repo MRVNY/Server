@@ -40,9 +40,9 @@ class Users {
 
   async exists(login) {
     return new Promise((resolve, reject) => {
-      var req = 'SELECT DISTINCT login FROM users WHERE login = ? ;';
+      var stmt = this.db.prepare( 'SELECT DISTINCT login FROM users WHERE login = ? ;');
       // get pour un seul
-      req.get([login], (err, res) => {
+      stmt.get([login], (err, res) => {
         if (err) {
           reject(err);
         }
@@ -53,7 +53,7 @@ class Users {
 
   async checkpassword(login, password) {
     return new Promise((resolve, reject) => {
-      var stmt = db.prepare("SELECT rowid as user_id FROM users WHERE login = ? and password = ?")
+      var stmt = this.db.prepare("SELECT rowid as user_id FROM users WHERE login = ? and password = ?")
       stmt.get([login, password],function(err,res){
         if (err) reject(err);
         else resolve(res.user_id);
