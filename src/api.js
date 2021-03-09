@@ -14,11 +14,14 @@ function init(db) {
     });
     const users = new Users.default(db);
 
-    ///////LOGIN////////
+    //router.put('/api/user').send(user)
+
+    ////////LOGIN////////
     router.post("/user/login", async (req, res) => {
         try {
             const { login, password } = req.body;
-            // Erreur sur la requête HTTP, if no login or password
+            // Erreur sur la requête HTTP
+            //no login or no pwd
             if (!login || !password) {
                 res.status(400).json({
                     status: 400,
@@ -26,7 +29,7 @@ function init(db) {
                 });
                 return;
             }
-            //if user doesn't exisit
+            //if login doesn't exist
             if(! await users.exists(login)) {
                 res.status(401).json({
                     status: 401,
@@ -34,7 +37,7 @@ function init(db) {
                 });
                 return;
             }
-            //else, check password
+            //check pwd
             let userid = await users.checkpassword(login, password);
             if (userid) {
                 // Avec middleware express-session
@@ -74,7 +77,7 @@ function init(db) {
         }
     });
 
-    //show the user 
+    ////////GET AND DELETE USER////////
     router
         .route("/user/:user_id(\\d+)")
         .get(async (req, res) => {
@@ -163,5 +166,6 @@ function init(db) {
 
     return router;
 }
+
 exports.default = init;
 
