@@ -82,9 +82,9 @@ function init(db) {
             });
         }
     })
-    .delete(async (req, res) => {
+    .delete(async (req, res) => {     //////////LOGOUT//////////
         user = await users.get(1) //1
-        console.log("USER "+req.session.userid)//??????
+        //console.log("USER "+req.session.userid)//??????
         req.session.destroy();
         res.status(200).json({
             status: 200,
@@ -128,8 +128,6 @@ function init(db) {
                 .catch((err) => res.status(500).send(err));
         }
     });
-
-    //////////LOGOUT//////////
 
     return router;
 }

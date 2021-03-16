@@ -1,39 +1,50 @@
 class Friends {
-    constructor(db) {
-      this.db = db
-      // suite plus tard avec la BD
-      const req1 = `CREATE TABLE IF NOT EXISTS friends ( 
-        user VARCHAR(512) NOT NULL PRIMARY KEY, 
-        follower VARCHAR(256) NOT NULL
-        )`;
-      //this.db.run(req1);
-      
-      this.db.exec(req1, (err) => {
-        if (err) {
-          throw err; 
-        }
+  constructor(db) {
+    this.db = db
+    // suite plus tard avec la BD
+    const req1 = `CREATE TABLE IF NOT EXISTS friends ( 
+      user VARCHAR(512) NOT NULL PRIMARY KEY, 
+      following VARCHAR(256) NOT NULL
+      )`;
+    //this.db.run(req1);
+    
+    this.db.exec(req1, (err) => {
+      if (err) {
+        throw err; 
+      }
+    });
+  }
+
+  follow(user,following) {
+      let _this = this
+      return new Promise((resolve, reject) => {
+        var req = _this.db.prepare("INSERT INTO friends VALUES(?, ?)");
+        req.run([user,following], function(err) {
+          if (err) reject();
+          else resolve(true);
+        });
       });
-    }
+  }
 
-    add(login, password, lastname, firstname) {
-        let _this = this
-        return new Promise((resolve, reject) => {
-          var req = _this.db.prepare("INSERT INTO users VALUES(?, ?, ?, ?)");
-          req.run([login, password, lastname, firstname], function(err) {
-            if (err) reject();
-            else resolve(this.lastID);
-          });
-        });
-    }
+  unfollow(user,following) {
+    let _this = this
+    return new Promise((resolve, reject) => {
+      var req = _this.db.prepare("DELETE FROM friends WHERE user = ? AND following = ?");
+      req.run([user,following], function(err) {
+        if (err) reject();
+        else resolve(true);
+      });
+    });
+  }
 
-    delete(login, password, lastname, firstname) {
-        let _this = this
-        return new Promise((resolve, reject) => {
-          var req = _this.db.prepare("INSERT INTO users VALUES(?, ?, ?, ?)");
-          req.run([login, password, lastname, firstname], function(err) {
-            if (err) reject();
-            else resolve(this.lastID);
-          });
-        });
-    }
+  isFollowing(user,following) {
+    let _this = this
+    return new Promise((resolve, reject) => {
+      var req = _this.db.prepare("SELECT DISTINCT * FROM friends WHERE user = ? AND following = ?");
+      req.run([user,following], function(err) {
+        if (err) reject();
+        else resolve(res !== undefined);
+      });
+    });
+  }
 }

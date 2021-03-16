@@ -53,8 +53,6 @@ function init(db) {
         }
     });
 
-    //////////LOGOUT//////////
-
     return router;
 }
 
