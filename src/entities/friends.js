@@ -27,9 +27,8 @@ class Friends {
   }
 
   unfollow(user,following) {
-    let _this = this
     return new Promise((resolve, reject) => {
-      var req = _this.db.prepare("DELETE FROM friends WHERE user = ? AND following = ?");
+      var req = this.db.prepare("DELETE FROM friends WHERE user = ? AND following = ?");
       req.run([user,following], function(err) {
         if (err) reject();
         else resolve(true);
@@ -38,9 +37,8 @@ class Friends {
   }
 
   isFollowing(user,following) {
-    let _this = this
     return new Promise((resolve, reject) => {
-      var req = _this.db.prepare("SELECT DISTINCT * FROM friends WHERE user = ? AND following = ?");
+      var req = this.db.prepare("SELECT DISTINCT * FROM friends WHERE user = ? AND following = ?");
       req.run([user,following], function(err) {
         if (err) reject();
         else resolve(res !== undefined);
@@ -49,9 +47,8 @@ class Friends {
   }
 
   getFollowers(following) {
-    let _this = this
     return new Promise((resolve, reject) => {
-      var req = _this.db.prepare("SELECT DISTINCT user FROM friends WHERE following = ?");
+      var req = this.db.prepare("SELECT DISTINCT user FROM friends WHERE following = ?");
       req.run([following], function(err) {
         if (err) reject();
         else resolve(res);
@@ -60,9 +57,8 @@ class Friends {
   }
 
   getFollowings(user) {
-    let _this = this
     return new Promise((resolve, reject) => {
-      var req = _this.db.prepare("SELECT DISTINCT following FROM friends WHERE user = ? ");
+      var req = this.db.prepare("SELECT DISTINCT following FROM friends WHERE user = ? ");
       req.run([user], function(err) {
         if (err) reject();
         else resolve(res);

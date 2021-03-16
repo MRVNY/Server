@@ -24,7 +24,7 @@ function init(db) {
         .route("/user/:user_id(\\d+)")
         .put((req, res) => {
             const { following } = req.body;
-            if (!following || !users.exists(req.params.user_id)) {
+            if (!following || !users.exists(req.params.user_id) || !users.exists(following)) {
                 res.status(400).send("User or user to follow unknown");
             } else {
                 if(friends.follow(req.params.user_id, following)){
@@ -33,8 +33,25 @@ function init(db) {
                 else res.sendStatus(404)
             }
         })
-        //UNFOLLOW
+    //UNFOLLOW
         .delete((req, res) => {}) //TODO
+
+
+    //SHOW FOLLOWERS
+    router
+        .get("/user/:user_id(\\d+)/followers", (req,res) => {
+            if (!users.exists(req.params.user_id)) res.status(400).send("User unknown");
+            else {
+                list = friends.getFollowers(req.params.user_id);
+                res.status(200).send(list);
+            }
+        })
+
+    //SHOW FOLLOWINGS
+    router
+        .get("/user/:user_id(\\d+)/followings", (req,res) => {}) //TODO
+
+
 
     return router;
 }
