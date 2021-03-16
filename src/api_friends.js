@@ -1,5 +1,6 @@
 const express = require("express");
 const Users = require("./entities/users.js");
+const Friends = require("./entities/friends.js");
 
 function init(db) {
     const router = express.Router();
@@ -13,45 +14,27 @@ function init(db) {
         next();
     });
     const users = new Users.default(db);
+    const friends = new Friends.default(db);
 
     //router.put('/api/user').send(user)
 
 
-    ////////GET AND DELETE USER////////
+    //FOLLOW 
     router
         .route("/user/:user_id(\\d+)")
-        .get(async (req, res) => {
-        try {
-            const user = await users.get(req.params.user_id);
-            if (!user)
-                res.sendStatus(404);
-            else
-                res.send(user);
-        }
-        catch (e) {
-            res.status(500).send(e);
-        }
-    })
-        .delete((req, res, next) => res.send(`delete user ${req.params.user_id}`));
-
-    
-    ////////ADD USER////////
-    /*{
-    "login": "pikachu",
-    "password": "1234",
-    "lastname": "chu",
-    "firstname": "pika"
-    }*/
-    router.put("/user", (req, res) => {
-        const { login, password, lastname, firstname } = req.body;
-        if (!login || !password || !lastname || !firstname) {
-            res.status(400).send("Missing fields");
-        } else {
-            users.create(login, password, lastname, firstname)
-                .then((user_id) => res.status(201).send({ id: user_id }))
-                .catch((err) => res.status(500).send(err));
-        }
-    });
+        .put((req, res) => {
+            const { following } = req.body;
+            if (!following || !users.exists(req.params.user_id)) {
+                res.status(400).send("User or user to follow unknown");
+            } else {
+                if(friends.follow(req.params.user_id, following)){
+                    res.status(200),send(req.params.user_id, " is now following ", following);
+                }
+                else res.sendStatus(404)
+            }
+        })
+        //UNFOLLOW
+        .delete((req, res) => {}) //TODO
 
     return router;
 }
