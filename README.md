@@ -1,7 +1,7 @@
 # À FAIRE
 Supprimer user  
 Logout  
-...  
+...   
 https://docs.google.com/document/d/1ghZOXky0LfkhRL7FfJOCBlssM1NNH8Z-HPbaTDpOP9o/edit?usp=sharing
 
 # pseudo code createUser
