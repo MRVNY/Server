@@ -1,14 +1,12 @@
 class Users {
   constructor(db) {
     this.db = db
-    // suite plus tard avec la BD
     const req1 = `CREATE TABLE IF NOT EXISTS users ( 
-      login VARCHAR(512) NOT NULL PRIMARY KEY, 
+      login VARCHAR(256) NOT NULL PRIMARY KEY, 
       password VARCHAR(256) NOT NULL, 
       lastname VARCHAR(256) NOT NULL, 
       firstname VARCHAR(256) NOT NULL 
       )`;
-    //this.db.run(req1);
     
     this.db.exec(req1, (err) => {
       if (err) {

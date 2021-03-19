@@ -13,24 +13,38 @@ function init(db) {
         console.log('Body', req.body);
         next();
     });
-    const users = new Users.default(db);
     const friends = new Friends.default(db);
-
-    //router.put('/api/user').send(user)
-
+    const users = new Users.default(db);
 
     //FOLLOW 
     router
         .route("/user/:user_id(\\d+)")
-        .put((req, res) => {
-            const { following } = req.body;
-            if (!following || !users.exists(req.params.user_id) || !users.exists(following)) {
-                res.status(400).send("User or user to follow unknown");
-            } else {
-                if(friends.follow(req.params.user_id, following)){
-                    res.status(200),send(req.params.user_id, " is now following ", following);
+        .put(async (req, res) => {
+            try{
+                const { following } = req.body;
+                login = (await users.get(req.params.user_id)).login;
+                if (!following || ! await users.exists(login) || ! await users.exists(following)) {
+                    res.status(400).send("User or user to follow unknown");
+                } else {
+                    if(! await friends.isFollowing(login,following)){
+                        reso = await friends.follow(login, following)
+                        if( reso != 0){
+                            if(await friends.isFollowing(login,following))
+                                res.status(201).send(`${login} is now following ${following}`);
+                            else res.status(400).send("Unsucessful")
+                        }
+                        else res.sendStatus(404)
+                    }
+                    else res.status(400).send("Already following")
                 }
-                else res.sendStatus(404)
+            }
+            catch (e) {
+                // Toute autre erreur
+                res.status(500).json({
+                    status: 500,
+                    message: "erreur interne",
+                    details: (e || "Erreur inconnue").toString()
+                });
             }
         })
     //UNFOLLOW
@@ -39,10 +53,13 @@ function init(db) {
 
     //SHOW FOLLOWERS
     router
-        .get("/user/:user_id(\\d+)/followers", (req,res) => {
-            if (!users.exists(req.params.user_id)) res.status(400).send("User unknown");
+        .get("/user/:user_id(\\d+)/followers", async (req,res) => {
+            login = (await users.get(req.params.user_id)).login;
+            console.log("Login: ",login)
+            if (! await users.exists(login)) res.status(400).send("User unknown");
             else {
-                list = friends.getFollowers(req.params.user_id);
+                list = await friends.getFollowers(login);
+                console.log("Followers: "+list);
                 res.status(200).send(list);
             }
         })
