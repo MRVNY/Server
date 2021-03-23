@@ -1,0 +1,52 @@
+h1{
+    color: black;
+    font-family: "Avenir Next";
+    font-weight: 100;
+}
+
+a{
+    color: purple;
+    text-decoration: underline;
+    font-weight: 100;
+    font-size: small;
+    text-indent: 0;
+}
+
+main{
+   width: 20em;
+   margin: auto;
+   font-family: "Avenir Next";
+   font-weight: 100;
+}
+
+form{
+    border: 1px solid black;
+}
+
+.box{
+    border: 1px solid black;
+}
+
+button{
+    background-color: white;
+    color: black;
+}
+
+button:hover {
+    background-color: black; /* Green */
+    color: white;
+}
+
+tr{
+    margin: auto;
+}
+
+.name{
+    display: flex;
+    flex-direction: row;
+}
+
+.name div{
+    display: flex;
+    flex-direction: row;
+}

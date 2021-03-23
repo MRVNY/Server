@@ -31,7 +31,7 @@ function init(db) {
             if (!login || !password) {
                 res.status(400).json({
                     status: 400,
-                    "message": "Requête invalide : login et password nécessaires"
+                    message: "Requête invalide : login et password nécessaires"
                 });
                 return;
             }
@@ -67,8 +67,8 @@ function init(db) {
             }
             // Faux login : destruction de la session et erreur
             req.session.destroy((err) => { });
-            res.status(403).json({
-                status: 403,
+            res.status(401).json({
+                status: 401,
                 message: "login et/ou le mot de passe invalide(s)"
             });
             return;
