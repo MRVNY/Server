@@ -1,6 +1,6 @@
 class Messages {
     constructor(db) {
-        db = new Datastore();
+        this.db = db;
         this.db.loadDatabase();
     }
 

@@ -1,5 +1,6 @@
 const express = require("express");
 const Messages = require("./entities/messages.js");
+const Users = require("./entities/users.js");
 
 function init(db,nedb) {
     const router = express.Router();

@@ -3,10 +3,7 @@ const Users = require("./entities/users.js");
 
 function init(db) {
     const router = express.Router();
-    // On utilise JSON
     router.use(express.json());
-    // simple logger for this router's requests
-    // all requests to this router will first hit this middleware
     router.use((req, res, next) => {
         console.log('API: method %s, path %s', req.method, req.path);
         console.log('Body', req.body);
@@ -17,10 +14,6 @@ function init(db) {
     //router.put('/api/user').send(user)
 
     ////////LOGIN////////
-    /*{
-        "login": "pikachu",
-        "password": "1234"
-    }*/
     router
     .route("/user/login")
     .post(async (req, res) => {
@@ -82,7 +75,8 @@ function init(db) {
             });
         }
     })
-    .delete(async (req, res) => {     //////////LOGOUT//////////
+    //////////LOGOUT//////////
+    .delete(async (req, res) => {
         user = await users.get(1) //1
         //console.log("USER "+req.session.userid)//??????
         req.session.destroy();
