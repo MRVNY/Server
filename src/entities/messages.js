@@ -14,15 +14,19 @@ class Messages {
     }
 
     exisit(row_id){
-        this.db.find({_id: row_id},function(err,res){
-            if(err) reject(err);
-            else resolve(res !== undefined);
+        return new Promise((resolve, reject) => {
+            this.db.find({_id: row_id},function(err,res){
+                if(err) reject(err);
+                else{
+                    resolve(res.length);
+                }
+            })
         })
     }
 
     delete(row_id){
         return new Promise((resolve, reject) => {
-            this.db.delete({_id: row_id},function(err){
+            this.db.remove({_id: row_id},function(err){
                 if(err) reject(err);
                 else resolve();
             })

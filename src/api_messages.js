@@ -25,7 +25,7 @@ function init(db,nedb) {
                 
                 login = (await users.get(req.params.user_id)).login;
                 if(! await users.exists(login)) res.status(400).send("User unknown");
-                else if(test=="") res.status(400).send("Message unknown");
+                else if(text=="") res.status(400).send("Message unknown");
                 else {
                     id = await msg.add(login, new Date(), text)
 
@@ -51,10 +51,10 @@ function init(db,nedb) {
             
             if(! await msg.exisit(msg_id)) res.status(400).send("Message unknown");
             else{
-                id = await msg.delete(msg_id);
+                await msg.delete(msg_id);
 
-                if(! await msg.exisit(id))
-                    res.status(201).send(`Message ${id} deleted`);
+                if(! await msg.exisit(msg_id))
+                    res.status(201).send(`Message ${msg_id} deleted`);
                 else res.status(400).send("Unsucessful")
             }
         }
