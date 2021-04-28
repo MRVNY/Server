@@ -18,6 +18,10 @@ class SignUp extends React.Component {
             lastname : this.refs.lastname.value
         }
         this.singup(toSend)
+        this.refs.login.value=""
+        this.refs.password.value=""
+        this.refs.firstname.value=""
+        this.refs.lastname.value=""
     }
     
     render(){

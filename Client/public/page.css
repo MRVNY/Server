@@ -25,10 +25,15 @@ header img{
 
 .PostBox{
     margin: auto;
-    display: flex;
-    flex-direction: row;
-    width: 50%;
     height: 5em;
+}
+
+.PostBox textarea {
+    width: 80%;
+    height: 5em;
+    text-align: left;
+    resize: none;
+    font-family: "Avenir Next";
 }
 
 .center{
@@ -36,16 +41,32 @@ header img{
     width: 80%;
 }
 
-.msg img{
-    width: 50px;
-    height: 50px;
-}
+
+
+
 
 .msg{
     display: flex;
     flex-direction: row;
     margin-top: 2em;
     border: 1px solid black;
+    font-family: "Avenir Next";
+}
+
+.msg pre{
+    text-align: left;
+    margin: auto;
+    margin-left: 0em;
+    font-family: "Avenir Next";
+}
+
+.msg img{
+    width: 50px;
+    height: 50px;
+}
+
+.msg button{
+    width: 6em;
 }
 
 .user{
@@ -58,6 +79,7 @@ header img{
     display: flex;
     margin-left: 1em;
     flex-direction: column;
+    text-align: left;
 }
 
 .username{

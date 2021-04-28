@@ -27,7 +27,7 @@ function init(db,nedb) {
                 if(! await users.exists(login)) res.status(400).send("User unknown");
                 else if(text=="") res.status(400).send("Message unknown");
                 else {
-                    id = await msg.add(login, new Date(), text)
+                    id = await msg.add(login, new Date(), text/*.replace(/(?:\r\n|\r|\n)/g, '<br/>')*/)
 
                     if(await msg.exisit(id))
                         res.status(201).send(`Message ${id} posted`);

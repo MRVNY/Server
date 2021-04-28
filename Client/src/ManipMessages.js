@@ -23,6 +23,7 @@ class ManipMessages extends React.Component {
             post : this.refs.post.value,
         }
         this.post(toSend)
+        document.getElementById("TextBox").value="";
     }
 
     //Show
@@ -38,12 +39,22 @@ class ManipMessages extends React.Component {
         )
     }
 
+    //Delete
+    delete = (id) => {
+        console.log(id)
+        this.props.api.delete('/user/'+this.props.id+'/messages',{ data: {"msg_id":id} }) 
+            .then(response => {
+                console.log(response);
+                this.show()
+        });
+    }
+
     
     render(){
         console.log(this.state.msgList)
         return (<div  className = 'center'> 
             <div className="PostBox">
-                <input type="text" ref="post"/>
+                <textarea type="text" ref="post" id='TextBox'/>
                 <button onClick={event => {this.send()}}>Post</button>
             </div>
             
@@ -52,7 +63,8 @@ class ManipMessages extends React.Component {
                     <img src="blathers.jpg"/> 
                     <div className='content'>
                         <div className='username'>{msg.user_id}</div>
-                        <label>{msg.text}</label>
+                        <pre>{msg.text}</pre>
+                        <button onClick={event => {this.delete(msg._id)}}>Delete</button>
                     </div>
                 </div>
             )
