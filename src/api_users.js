@@ -52,7 +52,8 @@ function init(db) {
                         req.session.userid = userid;
                         res.status(200).json({
                             status: 200,
-                            message: "Login et mot de passe accepté"
+                            message: "Login et mot de passe accepté",
+                            id: userid
                         });
                     }
                 });

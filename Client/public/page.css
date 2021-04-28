@@ -1,19 +1,25 @@
+h1{
+    font-family: "Avenir Next";
+}
+
 main{
     display: flex;
 }
 
 header{
-    display: flex;
-    flex-direction: row;
+    margin: auto;
+    width: 20%;
 }
 
 header img{
+    margin: auto;
     height: 50px;
+    display: flex;
 }
 
 #search_box{
-    display: flex;
     margin: auto;
+    width: 60%;
 }
 
 #content{
@@ -39,20 +45,29 @@ aside{
     margin-top: 10px;
 }
 
-#tweet_box{
+.PostBox{
+    margin: auto;
+    display: flex;
+    flex-direction: row;
     width: 50%;
     height: 5em;
 }
 
 #tweets{
-    width: 100em;
-    height: 10em;
+    margin: auto;
+    width: 60%;
+}
+
+.center{
+    margin: auto;
+    width: 60%;
 }
 
 .msg img{
     width: 50px;
     height: 50px;
 }
+
 .msg{
     display: flex;
     flex-direction: row;
@@ -64,7 +79,14 @@ aside{
     margin-left: 1em;
     flex-direction: column;
 }
-username{
+
+.content{
+    display: flex;
+    margin-left: 1em;
+    flex-direction: column;
+}
+
+.username{
     color: blue;
     text-decoration: underline;
 }

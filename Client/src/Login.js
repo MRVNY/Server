@@ -1,12 +1,12 @@
 import React from 'react';
 
-class Login extends React.Component {    
+class Login extends React.Component {
     login(data){
         const { login, password } = data
         this.props.api.post('/user/login',{"login":login,"password":password},) 
             .then(response => {
                 console.log(response);
-                if(response) this.props.login();
+                if(response) this.props.login(response.data.id);
         });
     }
 

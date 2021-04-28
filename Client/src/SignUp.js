@@ -21,7 +21,7 @@ class SignUp extends React.Component {
     }
     
     render(){
-    return <div className="SignUpForm">
+    return <div  className = 'center'>
       <div>
           <label>Login</label>
           <input type="text" ref="login"/>

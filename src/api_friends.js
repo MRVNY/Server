@@ -48,7 +48,9 @@ function init(db) {
             }
         })
     //UNFOLLOW
-        .delete((req, res) => {}) //TODO
+        .delete((req, res) => {
+            
+        }) //TODO
 
 
     //SHOW FOLLOWERS
