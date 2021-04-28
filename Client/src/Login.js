@@ -19,7 +19,7 @@ class Login extends React.Component {
     }
     
     render(){
-    return <div className="LoginForm">
+    return <div className="form" >
       <h2>Connexion</h2>
       <div>
           <label>Login</label>

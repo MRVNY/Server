@@ -46,8 +46,8 @@ class Messages {
         return new Promise((resolve, reject) => {
             this.db.find({user_id: user_id},function(err,res){
                 if(err) reject(err);
-                else resolve(res);
-            })
+                else resolve(res.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()))
+            })//.sort({created_at: -1})
         })
     }
 }

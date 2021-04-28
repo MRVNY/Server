@@ -1,6 +1,6 @@
 import React from 'react';
 
-class ShowMsg extends React.Component { 
+class ManipMessages extends React.Component { 
     constructor(props) {
         super(props);
         this.state = {
@@ -8,6 +8,24 @@ class ShowMsg extends React.Component {
         }
     }
 
+    //Post
+    post(data){
+        const { post } = data
+        this.props.api.put('/user/'+this.props.id+'/messages',{"text":post}) 
+            .then(response => {
+                console.log(response);
+                this.show()
+        });
+    }
+
+    send(event){
+        var toSend = {
+            post : this.refs.post.value,
+        }
+        this.post(toSend)
+    }
+
+    //Show
     componentDidMount(){
         this.show()
     }
@@ -15,33 +33,20 @@ class ShowMsg extends React.Component {
     show(){
          this.props.api.get('/user/'+this.props.id+'/messages') 
             .then(response => {
-                //this.out.innerHTML = "";
-                //var msgList = response.data;
                 this.setState({msgList: response.data});
-
-                /*
-                for(var i=0;i<this.msgList.length;i++){
-                    this.out.innerHTML += `<msg>
-                        <img src="blathers.jpg"/> 
-                        <content>
-                            <username>`+ this.msgList[i].user_id+`</username>
-                            <label>`+ this.msgList[i].text+`</label>
-                        </content>
-                    </msg>`
-                }
-                console.log(this.out)
-                */
-                //return msgList
             }
         )
-        //return msgList
     }
 
     
     render(){
-        //this.show()
         console.log(this.state.msgList)
         return (<div  className = 'center'> 
+            <div className="PostBox">
+                <input type="text" ref="post"/>
+                <button onClick={event => {this.send()}}>Post</button>
+            </div>
+            
         {this.state.msgList.map((msg) => (
                 <div className='msg'>
                     <img src="blathers.jpg"/> 
@@ -56,4 +61,4 @@ class ShowMsg extends React.Component {
   }
 }
 
-export default ShowMsg;
+export default ManipMessages;

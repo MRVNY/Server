@@ -17,32 +17,10 @@ header img{
     display: flex;
 }
 
-#search_box{
+.form{
     margin: auto;
-    width: 60%;
-}
-
-#content{
-    display: flex;
-}
-
-aside{
-    display: flex;
-    background-color: azure;
-    width: 200px;
-    height: 1000px;
-}
-
-#right_side{
-    display: flex;
-    flex-direction: column;
-    margin-top: 2em;
-    margin-left: 2em;
-}
-
-#write{
-    display: flex;
-    margin-top: 10px;
+    width: 80%;
+    border: 1px solid black;
 }
 
 .PostBox{
@@ -53,14 +31,9 @@ aside{
     height: 5em;
 }
 
-#tweets{
-    margin: auto;
-    width: 60%;
-}
-
 .center{
     margin: auto;
-    width: 60%;
+    width: 80%;
 }
 
 .msg img{
@@ -72,6 +45,7 @@ aside{
     display: flex;
     flex-direction: row;
     margin-top: 2em;
+    border: 1px solid black;
 }
 
 .user{
@@ -87,6 +61,8 @@ aside{
 }
 
 .username{
+    display: flex;
+    margin-left: 0em;
     color: blue;
     text-decoration: underline;
 }
