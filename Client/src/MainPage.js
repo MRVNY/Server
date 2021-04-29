@@ -3,6 +3,7 @@ import axios from 'axios';
 import NavigationPanel from './NavigationPanel';
 import MessagesPage from './MessagesPage';
 import SignUp from './SignUp';
+import FeedsPage from './FeedsPage';
 
 
 class MainPage extends React.Component {
@@ -24,7 +25,7 @@ class MainPage extends React.Component {
     this.setState({
         user: id,
       isConnected: true,
-      currentPage: 'messages',
+      currentPage: 'feeds',
     });
   }
 
@@ -40,8 +41,10 @@ class MainPage extends React.Component {
     this.setState({ currentPage: 'signup' });
   }
 
-  cancel = () => {
-    this.setState({ currentPage: 'login' });
+  toMsg = () => {
+    this.setState({
+      currentPage: 'messages',
+    });
   }
 
   render() {
@@ -54,13 +57,15 @@ class MainPage extends React.Component {
         logout={() => { this.setLogout() }}
         signup={() => { this.signup() }}
         api={this.api}
+        id={this.state.user}
       />
       <main>
-        
+        {(currentPage === 'login' || currentPage === 'feeds')
+          && <FeedsPage api={this.api} id={this.state.user}/>}
         {currentPage === 'messages'
           && <MessagesPage api={this.api} id={this.state.user}/>}
         {currentPage === 'signup'
-          && <SignUp api={this.api} cancel={() => { this.cancel() }}/>}
+          && <SignUp api={this.api} cancel={() => { this.setLogout() }}/>}
       </main>
     </div>;
   }

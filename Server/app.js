@@ -23,7 +23,7 @@ api_3 = require("./api_messages.js");
 const session = require("express-session");
 
 app.use(session({
-    secret: "technoweb rocks"
+    secret: "technoweb sucks"
 }));
 
 app.use('/api', apiU.default(db));

@@ -1,6 +1,6 @@
-import React from 'react';
+import React from 'react'
 
-class ManipMessages extends React.Component {
+class FeedsPage extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -32,11 +32,18 @@ class ManipMessages extends React.Component {
     }
 
     show(){
-         this.props.api.get('/user/'+this.props.id+'/messages') 
+        if(this.props.id===0){ //if not logged in, show everyone's tweets
+            this.props.api.get('/user/messages')
             .then(response => {
                 this.setState({msgList: response.data});
-            }
-        )
+            })
+        }
+        else{ //if logged in, show following's tweets
+            this.props.api.get('/user/'+this.props.id) 
+            .then(response => {
+                this.setState({msgList: response.data});
+            })
+        }
     }
 
     //Delete
@@ -53,18 +60,21 @@ class ManipMessages extends React.Component {
     render(){
         console.log(this.state.msgList)
         return (<div  className = 'center'> 
-            <div className="PostBox">
+            
+            {this.props.id!==0 && <div className="PostBox">
                 <textarea type="text" ref="post" id='TextBox'/>
                 <button onClick={event => {this.send()}}>Post</button>
-            </div>
-            
+            </div>}
+
+            <h2>Feeds</h2>
         {this.state.msgList.map((msg) => (
                 <div className='msg'>
                     <img src="blathers.jpg"/> 
                     <div className='content'>
                         <div className='username'>{msg.user_id}</div>
                         <pre>{msg.text}</pre>
-                        <button onClick={event => {this.delete(msg._id)}}>Delete</button>
+                        {this.props.id!==0 && this.props.id===msg.user_id && 
+                        <button onClick={event => {this.delete(msg._id)}}>Delete</button>}
                     </div>
                 </div>
             )
@@ -73,4 +83,4 @@ class ManipMessages extends React.Component {
   }
 }
 
-export default ManipMessages;
+export default FeedsPage;

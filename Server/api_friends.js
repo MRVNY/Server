@@ -56,21 +56,44 @@ function init(db) {
     //SHOW FOLLOWERS
     router
         .get("/user/:user_id(\\d+)/followers", async (req,res) => {
-            login = (await users.get(req.params.user_id)).login;
-            console.log("Login: ",login)
-            if (! await users.exists(login)) res.status(400).send("User unknown");
-            else {
-                list = await friends.getFollowers(login);
-                console.log("Followers: "+list);
-                res.status(200).send(list);
+            try{
+                login = (await users.get(req.params.user_id)).login;
+                if (! await users.exists(login)) res.status(400).send("User unknown");
+                else {
+                    list = await friends.getFollowers(login);
+                    console.log("Followers: "+list);
+                    res.status(200).send(list);
+                }
+            }
+            catch (e) {
+                res.status(500).json({
+                    status: 500,
+                    message: "Internal error",
+                    details: (e || "Unknown error").toString()
+                });
             }
         })
 
     //SHOW FOLLOWINGS
     router
-        .get("/user/:user_id(\\d+)/followings", (req,res) => {}) //TODO
-
-
+        .get("/user/:user_id(\\d+)/followings", async (req,res) => {
+            try{
+                login = (await users.get(req.params.user_id)).login;
+                if (! await users.exists(login)) res.status(400).send("User unknown");
+                else {
+                    list = await friends.getFollowings(login);
+                    console.log("Followings: "+list);
+                    res.status(200).send(list);
+                }
+            }
+            catch (e) {
+                res.status(500).json({
+                    status: 500,
+                    message: "Internal error",
+                    details: (e || "Unknown error").toString()
+                });
+            }
+        })
 
     return router;
 }

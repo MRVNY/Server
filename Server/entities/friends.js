@@ -2,7 +2,7 @@ class Friends {
   constructor(db) {
     this.db = db
     const req1 = `CREATE TABLE IF NOT EXISTS friends ( 
-      user VARCHAR(256) NOT NULL PRIMARY KEY, 
+      user VARCHAR(256) NOT NULL, 
       following VARCHAR(256) NOT NULL
       )`;
     

@@ -4,11 +4,11 @@ import Logout from './Logout'
 
 class NavigationPanel extends React.Component {
   render() {
-    const { login, logout, signup, isConnected, api } = this.props;
+    const { login, logout, signup, isConnected, api, id } = this.props;
     
     return <nav id="navPanel">
       {isConnected
-        ? <Logout logout={logout} api={api} />
+        ? <Logout logout={logout} api={api} id={id} />
         : <Login login={login} api={api} />}
       {!isConnected && <p>
         Pas encore de compte ?

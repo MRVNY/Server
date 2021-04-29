@@ -11,8 +11,6 @@ function init(db) {
     });
     const users = new Users.default(db);
 
-    //router.put('/api/user').send(user)
-
     ////////LOGIN////////
     router
     .route("/user/login")
@@ -24,7 +22,7 @@ function init(db) {
             if (!login || !password) {
                 res.status(400).json({
                     status: 400,
-                    message: "Requête invalide : login et password nécessaires"
+                    message: "Login and/or password missing"
                 });
                 return;
             }
@@ -32,7 +30,7 @@ function init(db) {
             if(! await users.exists(login)) {
                 res.status(401).json({
                     status: 401,
-                    message: "Utilisateur inconnu"
+                    message: "Login and/or password incorrect"
                 });
                 return;
             }
@@ -44,7 +42,7 @@ function init(db) {
                     if (err) {
                         res.status(500).json({
                             status: 500,
-                            message: "Erreur interne"
+                            message: "Internal error"
                         });
                     }
                     else {
@@ -52,7 +50,7 @@ function init(db) {
                         req.session.userid = userid;
                         res.status(200).json({
                             status: 200,
-                            message: "Login et mot de passe accepté",
+                            message: "Login and/or password accepted",
                             id: userid
                         });
                     }
@@ -63,7 +61,7 @@ function init(db) {
             req.session.destroy((err) => { });
             res.status(401).json({
                 status: 401,
-                message: "login et/ou le mot de passe invalide(s)"
+                message: "Login and/or password incorrect"
             });
             return;
         }
@@ -71,27 +69,16 @@ function init(db) {
             // Toute autre erreur
             res.status(500).json({
                 status: 500,
-                message: "erreur interne",
-                details: (e || "Erreur inconnue").toString()
+                message: "Internal error",
+                details: (e || "Unknown error").toString()
             });
         }
     })
-    //////////LOGOUT//////////
-    .delete(async (req, res) => {
-        user = await users.get(1) //1
-        //console.log("USER "+req.session.userid)//??????
-        req.session.destroy();
-        res.status(200).json({
-            status: 200,
-            message: user+" logged out"
-        });
-        return;
-    });
 
-    ////////GET AND DELETE USER////////
+    ////////GET USER////////
     router
         .route("/user/:user_id(\\d+)")
-        .get(async (req, res) => {
+        /*.get(async (req, res) => {
         try {
             const user = await users.get(req.params.user_id);
             if (!user)
@@ -102,8 +89,29 @@ function init(db) {
         catch (e) {
             res.status(500).send(e);
         }
-    })
-        .delete((req, res, next) => res.send(`delete user ${req.params.user_id}`));
+    })*/
+        .delete(async (req, res) => {
+            try{
+                user = await users.get(req.params.user_id)
+                if(!user) res.status(400).send("User doesn't exists");
+                else if(req.params.user_id != req.session.userid) res.status(400).send("User not correspondent with session");
+                else{
+                    req.session.destroy();
+                    res.status(200).json({
+                        status: 200,
+                        message: `${user.login} loggged out`
+                    })
+                }
+                return;
+            }
+            catch (e) {
+                res.status(500).json({
+                    status: 500,
+                    message: "Internal error",
+                    details: (e || "Unknown error").toString()
+                });
+            }
+        });
 
     
     ////////ADD USER////////
@@ -113,14 +121,26 @@ function init(db) {
     "lastname": "chu",
     "firstname": "pika"
     }*/
-    router.put("/user", (req, res) => {
-        const { login, password, lastname, firstname } = req.body;
-        if (!login || !password || !lastname || !firstname) {
-            res.status(400).send("Missing fields");
-        } else {
-            users.create(login, password, lastname, firstname)
-                .then((user_id) => res.status(201).send({ id: user_id }))
-                .catch((err) => res.status(500).send(err));
+    router.put("/user", async (req, res) => {
+        try{
+            const { login, password, lastname, firstname } = req.body;
+            if (!login || !password || !lastname || !firstname) {
+                res.status(400).send("Missing field(s)");
+            }
+            else if(await users.exists(login)) res.status(400).send("User already exists");
+            else {
+                users.create(login, password, lastname, firstname)
+                    .then((user_id) => res.status(201).send({ id: user_id }))
+                    .catch((err) => res.status(500).send(err));
+            }
+        }
+        catch (e) {
+            // Toute autre erreur
+            res.status(500).json({
+                status: 500,
+                message: "Internal error",
+                details: (e || "Unknown error").toString()
+            });
         }
     });
 
