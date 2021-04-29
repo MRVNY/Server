@@ -1,16 +1,43 @@
 import React from 'react'
-import ManipFriends from './ManipFriends'
 
 class FriendsPage extends React.Component {
-  render() {
-    const { api, id } = this.props;
+    constructor(props) {
+        super(props);
+        this.state = {
+            followers: [],
+            followings: []
+        }
+    }
 
-    return <div className = 'center'>
-        <h2>Feeds</h2>
-        <div id="tweets">
-            <ManipFriends api={api} id={id}/>
-        </div>
-    </div>;
+    //Show
+    componentDidMount(){
+        this.show()
+    }
+
+    show(){
+         this.props.api.get('/user/'+this.props.id+'/messages') 
+            .then(response => {
+                this.setState({msgList: response.data});
+            }
+        )
+    }
+    
+    render(){
+        console.log(this.state.msgList)
+        return (<div  className = 'center'> 
+            
+        {this.state.msgList.map((msg) => (
+                <div className='msg'>
+                    <img src="blathers.jpg"/> 
+                    <div className='content'>
+                        <div className='username'>{msg.user_id}</div>
+                        <pre>{msg.text}</pre>
+                        <button onClick={event => {this.delete(msg._id)}}>Delete</button>
+                    </div>
+                </div>
+            )
+        )}
+        </div>)
   }
 }
 

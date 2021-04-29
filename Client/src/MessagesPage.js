@@ -1,16 +1,76 @@
 import React from 'react'
-import ManipMessages from './ManipMessages'
 
 class MessagesPage extends React.Component {
-  render() {
-    const { api, id } = this.props;
+    constructor(props) {
+        super(props);
+        this.state = {
+            msgList: []
+        }
+    }
 
-    return <div className = 'center'>
-        <h2>Liste des messages</h2>
-        <div id="tweets">
-            <ManipMessages api={api} id={id}/>
-        </div>
-    </div>;
+    //Post
+    post(data){
+        const { post } = data
+        this.props.api.put('/user/'+this.props.id+'/messages',{"text":post}) 
+            .then(response => {
+                console.log(response);
+                this.show()
+        });
+    }
+
+    send(event){
+        var toSend = {
+            post : this.refs.post.value,
+        }
+        this.post(toSend)
+        document.getElementById("TextBox").value="";
+    }
+
+    //Show
+    componentDidMount(){
+        this.show()
+    }
+
+    show(){
+         this.props.api.get('/user/'+this.props.id+'/messages') 
+            .then(response => {
+                this.setState({msgList: response.data});
+            }
+        )
+    }
+
+    //Delete
+    delete = (id) => {
+        console.log(id)
+        this.props.api.delete('/user/'+this.props.id+'/messages',{ data: {"msg_id":id} }) 
+            .then(response => {
+                console.log(response);
+                this.show()
+        });
+    }
+
+    
+    render(){
+        console.log(this.state.msgList)
+        return (<div  className = 'center'> 
+            <div className="PostBox">
+                <textarea type="text" ref="post" id='TextBox'/>
+                <button onClick={event => {this.send()}}>Post</button>
+            </div>
+            
+            <h2>Liste des messages</h2>
+        {this.state.msgList.map((msg) => (
+                <div className='msg'>
+                    <img src="blathers.jpg"/> 
+                    <div className='content'>
+                        <div className='username'>{msg.user_id}</div>
+                        <pre>{msg.text}</pre>
+                        <button onClick={event => {this.delete(msg._id)}}>Delete</button>
+                    </div>
+                </div>
+            )
+        )}
+        </div>)
   }
 }
 
