@@ -9,34 +9,56 @@ class FriendsPage extends React.Component {
         }
     }
 
-    //Show
+    //update
     componentDidMount(){
-        this.show()
+        this.update()
     }
 
-    show(){
-         this.props.api.get('/user/'+this.props.id+'/messages') 
-            .then(response => {
-                this.setState({msgList: response.data});
-            }
-        )
+    update(){
+        this.props.api.get('/user/'+this.props.id+'/followers') 
+        .then(response => {
+            console.log(response)
+            this.setState({followers: response.data});
+        }).catch(e => {
+            alert(e);
+        });
+
+        this.props.api.get('/user/'+this.props.id+'/followings') 
+        .then(response => {
+            console.log(response)
+            this.setState({followings: response.data});
+        }).catch(e => {
+            alert(e);
+        });
     }
     
     render(){
-        console.log(this.state.msgList)
-        return (<div  className = 'center'> 
-            
-        {this.state.msgList.map((msg) => (
-                <div className='msg'>
-                    <img src="blathers.jpg"/> 
+        return (<div  className = 'twoCol'> 
+        <div className='col'>
+        <h1>Followers</h1>
+        {this.state.followers.map((user) => (
+                <div className='userBox' key={user.user}>
+                    <img src="blathers.jpg" alt="icon"/>
                     <div className='content'>
-                        <div className='username'>{msg.user_id}</div>
-                        <pre>{msg.text}</pre>
-                        <button onClick={event => {this.delete(msg._id)}}>Delete</button>
+                        <div className='bigName' onClick={event => {this.props.toProfile(user.user)}}>@{user.user}</div>
                     </div>
                 </div>
             )
         )}
+        </div>
+
+        <div className='col'>
+        <h1>Followings</h1>
+        {this.state.followings.map((user) => (
+                <div className='userBox' key={user.following}>
+                    <img src="blathers.jpg" alt="icon"/>
+                    <div className='content'>
+                        <div className='bigName' onClick={event => {this.props.toProfile(user.following)}}>@{user.following}</div>
+                    </div>
+                </div>
+            )
+        )}
+        </div>
         </div>)
   }
 }

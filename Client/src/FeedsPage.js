@@ -8,79 +8,94 @@ class FeedsPage extends React.Component {
         }
     }
 
+    componentDidMount() {
+        this.update()
+    }
+
     //Post
-    post(data){
+    post(data) {
         const { post } = data
-        this.props.api.put('/user/'+this.props.id+'/messages',{"text":post}) 
+        this.props.api.put('/user/' + this.props.id + '/messages', { "text": post })
             .then(response => {
                 console.log(response);
-                this.show()
-        });
+                this.update()
+            }).catch(e => {
+                alert(e);
+            });
     }
 
-    send(event){
+    send(event) {
         var toSend = {
-            post : this.refs.post.value,
+            post: this.refs.post.value,
         }
         this.post(toSend)
-        document.getElementById("TextBox").value="";
+        document.getElementById("TextBox").value = "";
     }
 
-    //Show
-    componentDidMount(){
-        this.show()
-    }
-
-    show(){
-        if(this.props.id===0){ //if not logged in, show everyone's tweets
+    //update
+    update() {
+        if (this.props.id === 0) { //if not logged in, update everyone's tweets
             this.props.api.get('/user/messages')
-            .then(response => {
-                this.setState({msgList: response.data});
-            })
+                .then(response => {
+                    console.log(response);
+                    this.setState({ msgList: response.data });
+                }).catch(e => {
+                    alert(e);
+                });
         }
-        else{ //if logged in, show following's tweets
-            this.props.api.get('/user/'+this.props.id) 
-            .then(response => {
-                this.setState({msgList: response.data});
-            })
+        else { //if logged in, update following's tweets
+            this.props.api.get('/user/' + this.props.id + '/feeds')
+                .then(response => {
+                    console.log(response);
+                    this.setState({ msgList: response.data });
+                }).catch(e => {
+                    alert(e);
+                });
         }
     }
 
     //Delete
     delete = (id) => {
         console.log(id)
-        this.props.api.delete('/user/'+this.props.id+'/messages',{ data: {"msg_id":id} }) 
+        this.props.api.delete('/user/' + this.props.id + '/messages', { data: { "msg_id": id } })
             .then(response => {
                 console.log(response);
-                this.show()
-        });
+                this.update()
+            }).catch(e => {
+                alert(e);
+            });
     }
 
-    
-    render(){
-        console.log(this.state.msgList)
-        return (<div  className = 'center'> 
-            
-            {this.props.id!==0 && <div className="PostBox">
-                <textarea type="text" ref="post" id='TextBox'/>
-                <button onClick={event => {this.send()}}>Post</button>
-            </div>}
+    render() {
+        const { toProfile, id } = this.props
+        return (<div className='center'>
 
-            <h2>Feeds</h2>
-        {this.state.msgList.map((msg) => (
-                <div className='msg'>
-                    <img src="blathers.jpg"/> 
+            {id !== 0
+                && <div className="PostBox">
+                    <h2>What's On Your Mind?</h2>
+                    <textarea type="text" ref="post" id='TextBox' />
+                    <p><button onClick={event => { this.send() }}>Post</button></p>
+                </div>}
+
+            {id === 0 && <h2>What Everyone's Tweeting</h2>}
+            {id !== 0 && <h2>Your Feed</h2>}
+            {this.state.msgList.map((msg) => (
+                <div className='msg' key={msg._id}>
+                    <img src="blathers.jpg" alt="icon" />
                     <div className='content'>
-                        <div className='username'>{msg.user_id}</div>
+                        <div className='top'>
+                            <div className='username' onClick={event => { toProfile(msg.user_id) }}>@{msg.user_id}</div>
+                            <div className='date'>{msg.date}</div>
+                        </div>
                         <pre>{msg.text}</pre>
-                        {this.props.id!==0 && this.props.id===msg.user_id && 
-                        <button onClick={event => {this.delete(msg._id)}}>Delete</button>}
+                        {id !== 0 && id === msg.user_id &&
+                            <button onClick={event => { this.delete(msg._id) }}>Delete</button>}
                     </div>
                 </div>
             )
-        )}
+            )}
         </div>)
-  }
+    }
 }
 
 export default FeedsPage;

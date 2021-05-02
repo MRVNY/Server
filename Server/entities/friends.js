@@ -11,7 +11,7 @@ class Friends {
         throw err; 
       }
     });
-    this.db.exec(`INSERT INTO friends VALUES("pika","eevee")`)
+    //this.db.exec(`INSERT INTO friends VALUES("pika","eevee")`)
   }
 
   follow(user,following) {
@@ -37,7 +37,7 @@ class Friends {
 
   isFollowing(user,following) {
     return new Promise((resolve, reject) => {
-      var req = this.db.prepare(`SELECT DISTINCT * FROM friends WHERE user = ? AND following = ?`);
+      var req = this.db.prepare(`SELECT DISTINCT user FROM friends WHERE user = ? AND following = ?`);
       req.get([user,following], function(err,res) {
         if (err) reject(err);
         else resolve(res !== undefined);

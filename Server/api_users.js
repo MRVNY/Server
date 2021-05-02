@@ -78,7 +78,7 @@ function init(db) {
     ////////GET USER////////
     router
         .route("/user/:user_id(\\d+)")
-        /*.get(async (req, res) => {
+        .get(async (req, res) => {
         try {
             const user = await users.get(req.params.user_id);
             if (!user)
@@ -89,7 +89,7 @@ function init(db) {
         catch (e) {
             res.status(500).send(e);
         }
-    })*/
+    })
         .delete(async (req, res) => {
             try{
                 user = await users.get(req.params.user_id)
@@ -143,6 +143,27 @@ function init(db) {
             });
         }
     });
+
+    ///////SEARCH////////
+    router
+    .route("/user/search/:login")
+    .get(async (req, res) => {
+        try {
+            login = req.params.login
+            const user = await users.getByLogin(login);
+            if (!user)
+                res.sendStatus(404);
+            else
+                res.send(user);
+        }
+        catch (e) {
+            res.status(500).json({
+                status: 500,
+                message: "Internal error",
+                details: (e || "Unknown error").toString()
+            });
+        }
+    })
 
     return router;
 }

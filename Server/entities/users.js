@@ -36,6 +36,16 @@ class Users {
     });
   }
 
+  getByLogin(login){
+    return new Promise((resolve, reject) => {
+        var stmt = this.db.prepare("SELECT *,rowid FROM users WHERE login = ?")
+        stmt.get([login],function(err,res){
+          if (err) reject(err);
+          else resolve(res);
+        });
+    });
+  }
+
   async exists(login) {
     return new Promise((resolve, reject) => {
       var stmt = this.db.prepare( 'SELECT DISTINCT login FROM users WHERE login = ? ;');
@@ -54,6 +64,7 @@ class Users {
       var stmt = this.db.prepare("SELECT rowid as user_id FROM users WHERE login = ? and password = ?")
       stmt.get([login, password],function(err,res){
         if (err) reject(err);
+        if (res === undefined) reject();
         else resolve(res.user_id);
       })
     })

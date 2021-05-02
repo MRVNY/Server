@@ -4,9 +4,11 @@ class SignUp extends React.Component {
     singup(data){
         const { login, password, lastname, firstname } = data
 
-        this.props.api.put('/user',{"login":login, "password":password, "lastname":lastname, "firstname":firstname},) 
+        this.props.api.put('/user',{"login":login, "password":password, "lastname":lastname, "firstname":firstname}) 
             .then(response => {
                 console.log(response);
+        }).catch(e => {
+            alert(e);
         });
     }
 
@@ -25,23 +27,25 @@ class SignUp extends React.Component {
     }
     
     render(){
-    return <div  className = 'center'>
-      <div>
-          <label>Login</label>
-          <input type="text" ref="login"/>
-      </div>
-      <div>
-          <label>Password</label>
-          <input type="text" ref="password"/>
-      </div>
-      <div>
-          <label>LastName</label>
-          <input type="text" ref="lastname"/>
-      </div>
-      <div>
-          <label>FirstName</label>
-          <input type="text" ref="firstname"/>
-      </div>
+    return <div>
+        <div className = 'form'>
+            <div>
+                <label>Login</label>
+                <input type="text" ref="login"/>
+            </div>
+            <div>
+                <label>Password</label>
+                <input type="text" ref="password"/>
+            </div>
+            <div>
+                <label>LastName</label>
+                <input type="text" ref="lastname"/>
+            </div>
+            <div>
+                <label>FirstName</label>
+                <input type="text" ref="firstname"/>
+            </div>
+        </div>
 
       <button onClick={event => {this.props.cancel()}}>Cancel</button>
       <button onClick={event => {this.send()}}>Sign Up</button>

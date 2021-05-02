@@ -113,18 +113,18 @@ function init(db,nedb) {
     
     //Get feeds
     router
-        .route("/user/:user_id(\\d+)")
+        .route("/user/:user_id(\\d+)/feeds")
         .get(async(req,res) => {
-            try{            
+            try{
                 login = (await users.get(req.params.user_id)).login;
                 if(! await users.exists(login)) res.status(400).send("User unknown");
                 else{
                     followings = await friends.getFollowings(login)
-                    followings.concat(login)
+                    followings.push({following:login})
                     out = []
 
                     for(i=0;i<followings.length;i++){
-                        out.concat(await msg.show(followings[i]))
+                        out = out.concat(await msg.show(followings[i].following))
                     }
     
                     if(out !== undefined)

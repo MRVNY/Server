@@ -45,6 +45,7 @@ class Messages {
     }
 
     show(user_id){
+        //this.db.loadDatabase();
         //collection.find({ runtime: { $lt: 15 } }, { sort: { title: 1 }, projection: { _id: 0, title: 1, imdb: 1 }});
         return new Promise((resolve, reject) => {
             this.db.find({user_id: user_id},function(err,res){
@@ -55,6 +56,7 @@ class Messages {
     }
 
     all(){
+        //this.db.loadDatabase();
         return new Promise((resolve, reject) => {
             this.db.find({},function(err,res){
                 if(err) reject(err);

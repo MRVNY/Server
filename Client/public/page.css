@@ -1,35 +1,87 @@
-h1{
+#root{
+    background-color: aliceblue;
     font-family: "Avenir Next";
 }
 
-main{
-    display: flex;
+h1{
+    font-family: "Avenir Next";
+    font-weight: 500;
+}
+
+button{
+    width: auto;
+    height: 2.5em;
+    background-color: transparent;
+    border-width: 0;
+    border: 0.5px solid black;
+    cursor: pointer;
+}
+
+p{
+    margin: auto;
+    margin-top: 0.5em;
+}
+
+h2{
+    margin: auto;
+    font-family: "Avenir Next";
+    font-weight: 500;
+    margin-top: 0.5em;
 }
 
 header{
     margin: auto;
+    display: flex;
+    flex-direction: row;
     width: 20%;
+}
+header .userHeader{
+    position: absolute;
+    left: 0;
+    display: flex
+}
+
+header .search{
+    position: absolute;
+    right: 0;
+    display: flex;
 }
 
 header img{
     margin: auto;
     height: 50px;
     display: flex;
+    cursor: pointer;
 }
 
 .form{
     margin: auto;
-    width: 80%;
-    border: 1px solid black;
+    margin-top: 1em;
+    margin-bottom: 0.5em;
+    width: 30%;
+}
+
+.form div{
+    margin: auto;
+    margin-top: 0.5em;
+}
+
+.form label{
+    margin-right: 100%;
+}
+
+.form input{
+    width: 100%;
 }
 
 .PostBox{
-    margin: auto;
-    height: 5em;
+    margin-top: 1em;
+    height: auto;
 }
 
 .PostBox textarea {
-    width: 80%;
+    margin: auto;
+    width: 60%;
     height: 5em;
     text-align: left;
     resize: none;
@@ -44,18 +96,35 @@ header img{
 
 
 
+.icon{
+    width: 50px;
+    height: 50px;
+}
 
 .msg{
+    margin: auto;
+    width: 80%;
     display: flex;
     flex-direction: row;
-    margin-top: 2em;
+    margin-top: 1em;
     border: 1px solid black;
     font-family: "Avenir Next";
 }
 
-.msg pre{
-    text-align: left;
+.top{
+    width: 100%;
+}
+
+.date{
+    font-size: smaller;
     margin: auto;
+    float: right;
+    margin-right: 2px;
+}
+
+.msg pre{
+    margin: auto;
+    text-align: left;
     margin-left: 0em;
     font-family: "Avenir Next";
 }
@@ -77,14 +146,74 @@ header img{
 
 .content{
     display: flex;
+    width: 100%;
     margin-left: 1em;
     flex-direction: column;
     text-align: left;
 }
 
 .username{
-    display: flex;
     margin-left: 0em;
     color: blue;
     text-decoration: underline;
+    cursor: pointer;
+    float: left;
+}
+.delete{
+    font-size: small;
+    margin-left: 0em;
+    color: blue;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.profilePic{
+    margin-top: 1em;
+    width: 100px;
+    height: 100px;
+}
+
+.twoCol{
+    margin: auto;
+    width: 80%;
+    display: flex;
+    flex-direction: row;
+}
+
+.col{
+    margin-top: 0;
+    width: 100%;
+}
+
+.userBox{
+    margin: auto;
+    width: 10em;
+    margin-top: 2em; 
+    position:relative;
+    display: flex;
+    flex-direction: row;
+    border: 1px solid black;
+    font-family: "Avenir Next";
+}
+
+.userBox img{
+    width: 50px;
+    height: 50px;
+}
+
+.link{
+    margin-left: 0em;
+    color: blue;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.bigName{
+    margin:auto;
+    margin-left: 0em;
+    font-size: larger;
+    font-family: "Avenir Next";
+    color: blue;
+    text-decoration: underline;
+    cursor: pointer;
 }

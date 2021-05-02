@@ -18,10 +18,11 @@ function init(db) {
 
     //FOLLOW 
     router
-        .route("/user/:user_id(\\d+)")
+        .route("/user/:user_id(\\d+)/follow")
         .put(async (req, res) => {
             try{
-                const { following } = req.body;
+                const { followingID } = req.body;
+                following = (await users.get(followingID)).login;
                 login = (await users.get(req.params.user_id)).login;
                 if (!following || ! await users.exists(login) || ! await users.exists(following)) {
                     res.status(400).send("User or user to follow unknown");
@@ -48,9 +49,35 @@ function init(db) {
             }
         })
     //UNFOLLOW
-        .delete((req, res) => {
-            
-        }) //TODO
+        .delete(async (req, res) => {
+            try{
+                const { followingID } = req.body;
+                if(followingID) following = (await users.get(followingID)).login;
+                login = (await users.get(req.params.user_id)).login;
+                if (!following || ! await users.exists(login) || ! await users.exists(following)) {
+                    res.status(400).send("User or user to unfollow unknown");
+                } else {
+                    if(await friends.isFollowing(login,following)){
+                        reso = await friends.unfollow(login, following)
+                        if( reso != 0){
+                            if(!await friends.isFollowing(login,following))
+                                res.status(201).send(`${login} unfollowed ${following}`);
+                            else res.status(400).send("Unsucessful")
+                        }
+                        else res.sendStatus(404)
+                    }
+                    else res.status(400).send("Already not following")
+                }
+            }
+            catch (e) {
+                // Toute autre erreur
+                res.status(500).json({
+                    status: 500,
+                    message: "erreur interne",
+                    details: (e || "Erreur inconnue").toString()
+                });
+            }
+        })
 
 
     //SHOW FOLLOWERS
@@ -60,8 +87,34 @@ function init(db) {
                 login = (await users.get(req.params.user_id)).login;
                 if (! await users.exists(login)) res.status(400).send("User unknown");
                 else {
-                    list = await friends.getFollowers(login);
-                    console.log("Followers: "+list);
+                    await friends.getFollowers(login)
+                    .then(async (list) => {
+                        res.status(200).send(list);
+                    })
+                    
+                }
+            }
+            catch (e) {
+                res.status(500).json({
+                    status: 500,
+                    message: "Internal error",
+                    details: (e || "Unknown error").toString()
+                });
+            }
+        })
+
+    // SHOW FOLLOWINGS 
+    router
+        .get("/user/:user_id(\\d+)/followings", async (req,res) => {
+            try{
+                login = (await users.get(req.params.user_id)).login;
+                if (! await users.exists(login)) res.status(400).send("User unknown");
+                else {
+                    list = await friends.getFollowings(login);
+                    /*out=[]
+                    for(i=0;i<list.length;i++){
+                        out.push(await users.getByLogin(list[i].user))
+                    }*/
                     res.status(200).send(list);
                 }
             }
@@ -74,17 +127,15 @@ function init(db) {
             }
         })
 
-    //SHOW FOLLOWINGS
-    router
-        .get("/user/:user_id(\\d+)/followings", async (req,res) => {
+
+        //CHECK IF FOLLOWING
+        router
+        .get("/user/:user_id(\\d+)/followings/:toCheck", async (req,res) => {
             try{
-                login = (await users.get(req.params.user_id)).login;
-                if (! await users.exists(login)) res.status(400).send("User unknown");
-                else {
-                    list = await friends.getFollowings(login);
-                    console.log("Followings: "+list);
-                    res.status(200).send(list);
-                }
+                const toCheck= (await users.get(req.params.toCheck)).login
+                const login = (await users.get(req.params.user_id)).login;
+                const ifFollowing = await friends.isFollowing(login,toCheck)
+                res.status(200).send(ifFollowing)
             }
             catch (e) {
                 res.status(500).json({
