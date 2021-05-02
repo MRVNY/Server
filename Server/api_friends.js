@@ -4,10 +4,7 @@ const Friends = require("./entities/friends.js");
 
 function init(db) {
     const router = express.Router();
-    // On utilise JSON
     router.use(express.json());
-    // simple logger for this router's requests
-    // all requests to this router will first hit this middleware
     router.use((req, res, next) => {
         console.log('API: method %s, path %s', req.method, req.path);
         console.log('Body', req.body);
@@ -48,6 +45,7 @@ function init(db) {
                 });
             }
         })
+
     //UNFOLLOW
         .delete(async (req, res) => {
             try{
@@ -78,7 +76,6 @@ function init(db) {
                 });
             }
         })
-
 
     //SHOW FOLLOWERS
     router
@@ -127,24 +124,23 @@ function init(db) {
             }
         })
 
-
-        //CHECK IF FOLLOWING
-        router
-        .get("/user/:user_id(\\d+)/followings/:toCheck", async (req,res) => {
-            try{
-                const toCheck= (await users.get(req.params.toCheck)).login
-                const login = (await users.get(req.params.user_id)).login;
-                const ifFollowing = await friends.isFollowing(login,toCheck)
-                res.status(200).send(ifFollowing)
-            }
-            catch (e) {
-                res.status(500).json({
-                    status: 500,
-                    message: "Internal error",
-                    details: (e || "Unknown error").toString()
-                });
-            }
-        })
+    //CHECK IF FOLLOWING
+    router
+    .get("/user/:user_id(\\d+)/followings/:toCheck", async (req,res) => {
+        try{
+            const toCheck= (await users.get(req.params.toCheck)).login
+            const login = (await users.get(req.params.user_id)).login;
+            const ifFollowing = await friends.isFollowing(login,toCheck)
+            res.status(200).send(ifFollowing)
+        }
+        catch (e) {
+            res.status(500).json({
+                status: 500,
+                message: "Internal error",
+                details: (e || "Unknown error").toString()
+            });
+        }
+    })
 
     return router;
 }

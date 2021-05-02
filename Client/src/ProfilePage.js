@@ -116,13 +116,17 @@ class ProfilePage extends React.Component {
             <p>@{this.state.userInfo.login}</p>
             <p>
 
-            {id===0 && <button onClick={event => {toLogin()}}>Login to follow</button>}
-            {id!==0 && profileID!==0 && profileID!==id && this.state.isFollowing && <button onClick={event => {this.unfollow()}}>Unfollow</button>}
-            {id!==0 && profileID!==0 && profileID!==id && !this.state.isFollowing && <button onClick={event => {this.follow()}}>Follow</button>}
-            {id!==0 && id===profileID && <p className="link" onClick={event => {toFriends()}} >
-                Followers:{this.state.followers} Followings:{this.state.followings} </p> }
-            {id!==profileID && <p className="link" >
-                Followers:{this.state.followers} Followings:{this.state.followings} </p> }
+            {id===0 
+                && <button onClick={event => {toLogin()}}>Login to follow</button>}
+            {id!==0 && profileID!==0 && profileID!==id 
+                && this.state.isFollowing 
+                && <button onClick={event => {this.unfollow()}}>Unfollow</button>}
+            {id!==0 && profileID!==0 && profileID!==id 
+                && !this.state.isFollowing && <button onClick={event => {this.follow()}}>Follow</button>}
+            {id!==0 && id===profileID 
+                && <p className="link" onClick={event => {toFriends()}} >Followers:{this.state.followers} Followings:{this.state.followings} </p> }
+            {id!==profileID 
+                && <p className="link" >Followers:{this.state.followers} Followings:{this.state.followings} </p> }
                 </p>
         </div>
 

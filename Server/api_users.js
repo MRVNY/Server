@@ -17,7 +17,6 @@ function init(db) {
     .post(async (req, res) => {
         try {
             const { login, password } = req.body;
-            // Erreur sur la requête HTTP
             //no login or no pwd
             if (!login || !password) {
                 res.status(400).json({
@@ -50,7 +49,7 @@ function init(db) {
                         req.session.userid = userid;
                         res.status(200).json({
                             status: 200,
-                            message: "Login and/or password accepted",
+                            message: "Login and password accepted",
                             id: userid
                         });
                     }
@@ -90,6 +89,7 @@ function init(db) {
             res.status(500).send(e);
         }
     })
+    ////////LOGOUT////////
         .delete(async (req, res) => {
             try{
                 user = await users.get(req.params.user_id)
@@ -115,12 +115,6 @@ function init(db) {
 
     
     ////////ADD USER////////
-    /*{
-    "login": "pikachu",
-    "password": "1234",
-    "lastname": "chu",
-    "firstname": "pika"
-    }*/
     router.put("/user", async (req, res) => {
         try{
             const { login, password, lastname, firstname } = req.body;

@@ -1,6 +1,6 @@
 const chaiHttp = require('chai-http');
 const chai = require('chai');
-const app = require('../src/app.js'); // c'est l'app "express"
+const app = require('../Server/app.js'); // c'est l'app "express"
 //import { describe, it } from 'mocha'
 const mocha = require('mocha');
 
@@ -9,7 +9,7 @@ chai.use(chaiHttp);
 chai.should();
 
 mocha.describe("Test de LOGOUT", () => {
-    mocha.it("user", (done) => {
+    mocha.it("logout", (done) => {
         const request = chai.request(app.default).keepOpen();
         const user = {
             login: "pikachuu",
@@ -52,10 +52,14 @@ mocha.describe("Test de LOGOUT", () => {
             })
 
         request
-            .delete('/api/user/login')
+            .delete('/api/user/1')
             
             .then((res) =>{
                 res.should.have.status(200)
+            })
+
+            .finally(() => {
+                request.close()
             })
 
     })
